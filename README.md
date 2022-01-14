@@ -179,8 +179,13 @@ Further feature engineering could be done, most notably improving the function t
 
 ## RESOURCES USED
 [Josh Weinder: NBA ML github repository](https://github.com/JoshWeiner/NBA_Game_Prediction/blob/main/CIS_545_Final_Project.ipynb)
+
 [Analysis Factor: Why use odds ratios](https://www.theanalysisfactor.com/why-use-odds-ratios/)
+
 [Fivethirtyeight: How our predictions work](https://fivethirtyeight.com/methodology/how-our-nba-predictions-work/)
+
 [What is ELO?](https://medium.com/purple-theory/what-is-elo-rating-c4eb7a9061e0)
+
 [Eric Scot Jones: Predicting NBA Outcomes](https://library.ndsu.edu/ir/bitstream/handle/10365/28084/Predicting%20Outcomes%20of%20NBA%20Basketball%20Games.pdf?sequence=1&isAllowed=y)
+
 [Jaak Udmae: Predicting NBA Outcomes](http://cs229.stanford.edu/proj2017/final-reports/5231214.pdf)
