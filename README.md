@@ -2,24 +2,32 @@
 
 ## Problem Statement
 
-Can I reasonably predict the results of NBA games from the back-half of a season from the opening half of the season?
+Can I predict the results of NBA games from the back-half of a season from the opening half of the season?
+
+Most NBA ML predictors use a plethora of data to predict on a limited test set, I wanted to see if I could create a predictor that could eclipse the baseline and reach an r2 score of 60+ percent.
+
+Most NBA ML predictors use a variation of ELO rankings to judge team performance, I want to include that in my data as well and judge it's correlation with team performance both offensively and defensively.
 
 ### Project Goal:
 
-1. Create a model that successfully predicts NBA games above a baseline of 0.68 when given a variety of statistical features.
+1. Create a model that successfully predicts NBA games above 0.6 r2 score when given a variety of statistical features. 
 
 2. From the data and these models, what differences can we infer between the first-half of a given NBA season and the second-half?
+
+3. Find out the effects of ELO on NBA statistical performance
+
+4. Attach an ELO column to the dataframe
 
 ### Project Hypothesis:
 
 Using features such as ELO and home/away records, I should be able to capture the data above the baseline and near the 0.60 mark. I don't suspect my project to come anywhere close to prediction levels of similar models that had more training data, but if I could get a model that consistently predicts upwards of >0.5 on a model for each of the six seasons. 
 
-I believe that the information gathered on the first half of the season should be enough to decide which team performs well and which team doesn't. The changes from injuries and fluctuations in roster through trades should be accounted for because I would not be using seasonal data up to that point but rather average data from the last 10 games which should account for any dips or bumps in form. I hypothesize that throughout the EDA process and modelling 
+I believe that the information gathered on the first half of the season should be enough to decide which team performs well and which team doesn't. The changes from injuries and fluctuations in roster through trades should be accounted for because I would not be using seasonal data up to that point but rather average data from the last 10 games which should account for any dips or bumps in form. I hypothesize that throughout the EDA process and modeling that the features and key variables will be distributed normally and not have any severe differences.
 
 
 ## Executive Summary:
 
-For this project, the main dataset was created by parsing HTML pages from basketball-reference.com. I created two functions, one that scraped box-scores of individual game pages and one that scraped schedule pages, these two functions used together were able to gather 6 seasons of box score data of each individual game. After scraping and cleaning this data, I added numerous features in an effort to improve the available feature set which were comprised of columns from the box score and advanced box score pages, one of these features being ELO which was then used to create home odds and probabilities. After this stage, we started using models and performing EDA simultaneously, trying to figure out what the first half of the season was telling us relative to second half performance and if we even can model it. Alongside this, I wanted to test the correlation of ELO and prominent box score features such as defensive rating, offensive rating, points scored, and opponent points scored. I found that all four of those features are highly correlated to ELO using joint-plots and teams that were offensively successful generally had higher ELOs. The distributions for prominent featurs such as ELO, offensive rating, defensive rating, points scored, and points conceded were normal and in no way skewed to either direction, ELO was the feature that had the most variance when looking at the features during modeling. The modeling stage so far has been disappointing, but we are still in the early stages of modeling. That being said, both using PCA and not using PCA to limit features, it has consistently produced low scores. It is likely in this case, that in order for a good NBA model to work, the training data size has to be larger even when only predicting for a half season. The evidence for this is other NBA predictors using similar features and getting better results due to larger training data size. 
+For this project, the main dataset was created by parsing HTML pages from basketball-reference.com. I created two functions, one that scraped box-scores of individual game pages and one that scraped schedule pages, these two functions used together were able to gather 6 seasons of box score data of each individual game. After scraping and cleaning this data, I added numerous features in an effort to improve the available feature set which were comprised of columns from the box score and advanced box score pages, one of these features being ELO which was then used to create home odds and probabilities. After this stage, we started using models and performing EDA simultaneously, trying to figure out what the first half of the season was telling us relative to second half performance and if we even can model it. Alongside this, I wanted to test the correlation of ELO and prominent box score features such as defensive rating, offensive rating, points scored, and opponent points scored. I found that all four of those features are highly correlated to ELO using joint-plots and teams that were offensively successful generally had higher ELOs. The distributions for prominent featurs such as ELO, offensive rating, defensive rating, points scored, and points conceded were normal and in no way skewed to either direction, ELO was the feature that had the most variance when looking at the features during modeling. The modeling stage has been disappointing. Both using PCA and not using PCA to limit features, it has consistently produced low scores. It is likely in this case, that in order for a good NBA model to work, the training data size has to be larger even when only predicting for a half season. The evidence for this is other NBA predictors using similar features and getting better results due to larger training data size. 
 
 ## Data Sources
 
@@ -103,7 +111,7 @@ DISCLAIMER(THIS IS NOT THE DATA USED TO MODEL, THIS IS THE CLEANED DATA WHICH HA
 | TEAM_ELO_BEFORE_HOME      | float64 | Home team ELO before result                 |      1500    |
 | TEAM_ELO_BEFORE_AWAY      | float64 | Away team ELO before result                 |      1500    |
 | TEAM_ELO_AFTER_HOME       | float64 | Home team ELO after result                  |     1595.67  |
-| TEAM_ELO_AFTER_AWAY       | float64 | Away team ELO after result                  |     1420.67 |
+| TEAM_ELO_AFTER_AWAY       | float64 | Away team ELO after result                  |     1420.67  |
 | ODDS_HOME                 | float64 | Odds home team wins                         |      1.64    |
 | PROBS_HOME                | float64 | Probability home team wins                  |      0.64    |
 | PROBS_AWAY                | float64 | Probability away team wins                  |      0.36    |
@@ -120,17 +128,25 @@ After using seaborn to create the plots mentioned previously, I wanted to use ma
 
 The modeling performance has been very lackluster, this is likely due to a minimal amount of time spent modeling compared to EDA, cleaning, and feature engineering. I'm confident that there is a feature-set in what already exists in the data that is ideal, it's just a matter of finding that feature-set and seeing the results of that model and tuning the hyperparameters and tweaking the model. The likely answer to this sadly, might be that it's dificult to produce good results with a training dataset thats only less than the size of the first half of the season when you take into account that the dataframe ignores the first ten games of the season due to the function used during data engineering.
 
+The best model was a kNN model using unscaled data, I didn't adjust the hyperparameters throughout the process only experimenting with feature selection. Further modeling down the road, will require hyper-parameter selection via both random-search and grid-search. Logistic Regression and Random Forest models also showed promise using different datasets, the margins between kNN, Logistic Regression, and Random Forest were all miniscule and it warrants further investigation into modeling.
 
+## RESULTS
+
+1. I was unable to create a model that reached 0.6 r2 score, while I was above the baseline of 0.5, considering the fact that the team with the best record wins 68% of the time, it makes my model far below par. This could be attributed to the fact that one half season of data is not enough to create an accurate model but additionally, there are intangible factors at play in the second half of the season that aren't detected in any model. Those intangible factors are primarily due to player personnel, management, and roster construction. If a team suffers a harsh plateau at the end of the season due to injuries, it might take a while for the model to catch up from that fact just from detecting team stats or it could bethe opposite where in the second half, the roster of a team gets healthier. Roster injuries and additions via trade or free agency are what this model overlooks because it can't account for that just from team stats alone. Depelted and added rosters are hard to reasonably predict on and with the ongoing shuffling of NBA rosters, this only compounds further and further.
+
+2. Offensive and defensive performance generally don't change too drastically over the course of the season in totality, further research could be done looking at individual teams but generally speaking point totals and league-wide performance does not change from half to half.
+
+3. ELO is tied heavily to point totals, this is due to the fact that the formula accounts for margin of win and loss so its natural that higher point totals are similarily correlated. Offensive and defensive performance as well are heavily correlated. The nature of ELO makes it a great predictor and is why numerous models use it alongside the most esteemed of which being fivethirtyeight's model.
+
+4. Great success, used Josh Weiner's functions to create the ELO columns but did modify the for loop to account for my dataframe and added additional features such as ELO that doesn't continue from season to season.
 
 ## NEXT STEPS
 
-The model so far has been lackluster, I will continue to update the function used to get n games in an effort to take advantage of the entire dataset, see whether using the additional ten games at the beginning leads to better results. 
+The model so far has been lackluster, I will continue to update the function used to get n games in an effort to take advantage of the entire dataset, see whether using the additional ten games at the beginning leads to better results. It is most likely, that in order to actually create a model that predicts the back-half of a season. We would need a plethora more training data. I doubt more features would be the solution given the sheer amount of features already in the model at it's disposal. Perhaps, a new project can be spun off from this using the same data that takes into account previous season performance + first half season performacne in order to predict wins in the second half. A similar project was done by Gregory Jean-Baptiste, Xuejiao Liu, and Dionny Santiago ([project link](http://dionny.github.io/NBAPredictions/website/)) where they train numerous ml models on the previous season's data + beginning of the season they were modeling on.
 
+Further EDA could be done to perform more plots illustrating potential differences on the second and first halves of a given NBA season. Some ideas potentially could be creating a for loop that creates histograms of each column in both the first half and second half dataframes in the EDA notebook.
 
-
-
-
-
+Further feature engineering could be done, most notably improving the function that takes previous n games and make it account for potential index errors by using try and except clauses in the function. Additional data such as player data could be incorporated into the dataframe to improve the model's selection of features but it's a lot more viable to spin off the existing data and features into a new project that looks at a new problem entirely and uses ML NBA game prediction from there.
 
 ## SOFTWARE REQUIREMENTS
 ### Programming language used: 
@@ -160,3 +176,11 @@ The model so far has been lackluster, I will continue to update the function use
 - Statistics: Python module used for various operations made to calculate specific statistical equations.
 
 - Scikit-Learn: Scikit-learn is a free software machine learning library for the Python programming language. Specific Scikit-Learn libraries used are neighbors, ensemble, pipeline, model selection, metrics, linear model, and pre-processing
+
+## RESOURCES USED
+[Josh Weinder: NBA ML github repository](https://github.com/JoshWeiner/NBA_Game_Prediction/blob/main/CIS_545_Final_Project.ipynb)
+[Analysis Factor: Why use odds ratios](https://www.theanalysisfactor.com/why-use-odds-ratios/)
+[Fivethirtyeight: How our predictions work](https://fivethirtyeight.com/methodology/how-our-nba-predictions-work/)
+[What is ELO?](https://medium.com/purple-theory/what-is-elo-rating-c4eb7a9061e0)
+[Eric Scot Jones: Predicting NBA Outcomes](https://library.ndsu.edu/ir/bitstream/handle/10365/28084/Predicting%20Outcomes%20of%20NBA%20Basketball%20Games.pdf?sequence=1&isAllowed=y)
+[Jaak Udmae: Predicting NBA Outcomes](http://cs229.stanford.edu/proj2017/final-reports/5231214.pdf)
